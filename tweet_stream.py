@@ -9,6 +9,8 @@ OAUTH_TOKEN_SECRET = 'x4ZPGXwRWbKfId48uzxuSmG4BzwYLzNAmpIEijRSDq1fi'
 
 keyword_list = ['python', 'javascript', 'php', 'C#'] # track list
 
+limit = 500
+
 # Extend StreamListener
 class MyStreamListener(StreamListener):
     
@@ -17,13 +19,18 @@ class MyStreamListener(StreamListener):
         self.num_tweets = 0
     
     def on_data(self, data):
-        try:
-            with open('tweet_mining.json', 'a') as tweet_file:
-                tweet_file.write(data)
-                return True
-        except BaseException as e:
-            print("Failed on_data: %s"%str(e))
-        return True
+        # limit to 500 results
+        if self.num_tweets < limit:
+            self.num_tweets += 1
+            try:
+                with open('tweet_mining.json', 'a') as tweet_file:
+                    tweet_file.write(data)
+                    return True
+            except BaseException as e:
+                print("Failed on_data: %s"%str(e))
+            return True
+        else:
+            return False
     
     def on_error(self, status):
         print(status)
