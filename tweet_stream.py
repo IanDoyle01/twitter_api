@@ -1,11 +1,9 @@
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy.streaming import StreamListener
+from twitter import get_auth, twitter_api
 
-CONSUMER_KEY = 'WzT76mRT2z1oACipf0Fa6w5fP'
-CONSUMER_SECRET = 'u0Ni4LVE4O1qhWgYfWIagMG8gcnI7arJJm8b2v56cFSW94LMRA'
-OAUTH_TOKEN = '272497238-hnCGnwFeU9xhVWlTd9AKy1gyIk6QF5Egtm9AI8Bm'
-OAUTH_TOKEN_SECRET = 'x4ZPGXwRWbKfId48uzxuSmG4BzwYLzNAmpIEijRSDq1fi'
+api = twitter_api()
 
 keyword_list = ['python', 'javascript', 'php', 'C#'] # track list
 
@@ -36,8 +34,7 @@ class MyStreamListener(StreamListener):
         print(status)
         return True
 
-auth = OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
-auth.set_access_token(OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+auth = get_auth()
 
 # Create an instance of the stream class
 twitter_stream = Stream(auth, MyStreamListener())
